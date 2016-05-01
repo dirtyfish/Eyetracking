@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Script Tutorials" />
+    <title>Web-cam Video Capture in HTML5 and CSS3 filters | Script Tutorials</title>
+
+    <!-- Link styles -->
+    <link rel="stylesheet"  href="style.css" />
+
+
+
+
+    <!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Include jQuery Mobile stylesheets -->
+<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+
+
+<!-- Include the jQuery Mobile library -->
+<!--//<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+        P { text-align: center }
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="globalstep-=1" type="button">-1 x</button>
+       <button onclick="globalstep=0" type="button">0</button>
+    <button onclick="globalstep+=1" type="button">+1 x</button>
+    <button onclick="globalstep+=100" type="button">Stop</button>
+    <button onclick="loadpic(1)" type="button">+1 pic</button>
+    <button onclick="loadpic(-1)" type="button">-1 pic</button></br>
+       
+    <canvas id="myCanvas" width="318" height="159"></canvas>
+    <canvas id="datavertCanvas" width="318" height="256"></canvas>
+</br>
+ <canvas id="datahorizCanvas" width="318" height="256"></canvas>
+    <script>
+      var frame = 0;
+      var canvas = document.getElementById('myCanvas');
+      var ctx = canvas.getContext('2d');
+      var dvcanvas = document.getElementById('datavertCanvas');
+      var dvc = dvcanvas.getContext('2d');
+      var dhcanvas = document.getElementById('datahorizCanvas');
+      var dhc = dhcanvas.getContext('2d');
+      var imageObj = new Image();
+      var currentpic=globalstep=1
+      var processcount=0
+      var DataImg=dvc.getImageData(0,0,318,159);
+  
+
+
+
+      imageObj.onload = function() {
+         scan_vert(0,1,159);
+      };
+
+      function loadpic(change)
+      {
+      currentpic+=change
+      var mystring=""+(currentpic+100);
+      mystring=mystring.slice(1,9);
+      imageObj.src = 'eyes/eyes'+mystring+'.jpg';
+        console.log(imageObj.src)
+      console.log("Image obj w h "+imageObj.width+" "+imageObj.height)
+    }
+
+    loadpic(0);
+      
+       
+      function scan_vert(line,step,max)
+      {
+   //console.log("Scanning v line "+line);
+    processcount+=1;
+          ctx.drawImage(imageObj, 0, 0);
+          var imgData=ctx.getImageData(0,0,318,159);
+            var DataImg=ctx.createImageData(318,159);
+            
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (0==0)//strap on boobs
+                    {
+                      var average=0;
+                      phi=i-i%(4*318)//get first pixel of each row
+                      DataImg.data[phi+imgData.data[i]*4]=255
+                      average+=imgData.data[i]
+                      DataImg.data[phi+imgData.data[i]*4+3]=255
+
+
+                       DataImg.data[phi+imgData.data[i+1]*4+1]=255
+                       average+=imgData.data[i+1]
+                       DataImg.data[phi+imgData.data[i+1]*4+3]=255
+
+                        DataImg.data[phi+imgData.data[i+2]*4+2]=255;
+                        average+=imgData.data[i+2]
+                        DataImg.data[phi+imgData.data[i+2]*4+3]=255;
+
+                        average=average/3;        
+                        DataImg.data[phi+average*4]=255;
+                        DataImg.data[phi+average*4+2]=255;
+                        DataImg.data[phi+average*4+3]=255;
+
+
+
+                
+                
+                 
+            }
+                }
+
+           for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (1==1)//strap on boobs
+                    {
+                    DataImg.data[i]=imgData.data[i];
+                DataImg.data[i+1]=imgData.data[i+1];
+                DataImg.data[i+2]=imgData.data[i+2];
+                 DataImg.data[i+3]=255;
+            }
+                }
+
+if (1){
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (i%13==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                    if (i%128==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+            }
+
+        ctx.moveTo(line,0);
+    ctx.lineTo(line,5);
+    ctx.stroke();
+    dvc.moveTo(line,0);
+    dvc.lineTo(line,5);
+    dvc.stroke();
+       
+       dvc.putImageData(imgData,0,5);
+
+       dhc.putImageData(DataImg,0,5);
+       
+
+
+
+      
+  step=globalstep;
+      //repeat part
+      if (line<max)
+      {
+      setTimeout(function(){ scan_vert(line+step,step,max); }, 50);
+        }
+      else
+        {
+          console.log(processcount)
+             loadpic(1);
+        }
+        processcount-=1;
+
+        }
+
+   
+
+
+     function scan_horiz(row,step,max)
+      {
+   //console.log("Scanning v line "+line);
+    processcount+=1;
+          ctx.drawImage(imageObj, 0, 0);
+          var imgData=ctx.getImageData(0,0,318,159);
+            var DataImg=ctx.createImageData(318,159);
+            
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                     if (0==0)//strap on boobs
+                    {
+                      var average=0;
+                      phi=i-row*318*4//get first pixel of each row
+                      DataImg.data[phi+imgData.data[i]*4*318]=255
+                      average+=imgData.data[i]
+                      DataImg.data[phi+imgData.data[i]*4*318+3]=255
+
+
+                       DataImg.data[phi+imgData.data[i+1]*4*318+1]=255
+                       average+=imgData.data[i+1]
+                       DataImg.data[phi+imgData.data[i+1]*4*318+3]=255
+
+                        DataImg.data[phi+imgData.data[i+2]*4*318+2]=255;
+                        average+=imgData.data[i+2]
+                        DataImg.data[phi+imgData.data[i+2]*4*318+3]=255;
+
+                        average=average/3;        
+                        DataImg.data[phi+average*4*318]=255;
+                        DataImg.data[phi+average*4*318+2]=255;
+                        DataImg.data[phi+average*4*318+3]=255;
+
+
+
+                
+                
+                 
+            }
+                }
+
+
+if (1){
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                     if (i%13==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                    if (i%128==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+            }
+
+        ctx.moveTo(line,0);
+    ctx.lineTo(line,5);
+    ctx.stroke();
+    dvc.moveTo(line,0);
+    dvc.lineTo(line,5);
+    dvc.stroke();
+       
+       dvc.putImageData(imgData,0,5);
+
+       dhc.putImageData(DataImg,0,5);
+       
+
+
+
+      
+  step=globalstep;
+      //repeat part
+      if (line<max)
+      {
+      setTimeout(function(){ scan_vert(line+step,step,max); }, 50);
+        }
+      else
+        {
+          console.log(processcount)
+             loadpic(1);
+        }
+        processcount-=1;
+
+        }
+
+function eye_grabber();
+{
+  
+}
+    //scan_horiz(0,1,159);
+    
+    </script>
+  </body>
+</html>      
+</html>

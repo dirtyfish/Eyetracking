@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Script Tutorials" />
+    <title>Web-cam Video Capture in HTML5 and CSS3 filters | Script Tutorials</title>
+
+    <!-- Link styles -->
+    <link rel="stylesheet"  href="style.css" />
+
+
+
+
+    <!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Include jQuery Mobile stylesheets -->
+<!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+
+
+<!-- Include the jQuery Mobile library -->
+<!--//<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+ <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+        P { text-align: center }
+      }
+    </style>
+  </head>
+  <body>
+ 
+    <button onclick="globalstep-=1" type="button">-1</button>
+       <button onclick="globalstep=0;line+=1;" type="button">0</button>
+    <button onclick="globalstep+=1" type="button">+1</button>
+</br>
+     
+    <canvas id="myCanvas" width="318" height="159"></canvas>
+    <canvas id="datavertCanvas" width="318" height="256"></canvas>
+</br>
+ <canvas id="datahorizCanvas" width="318" height="256"></canvas>
+    <script>
+      var frame = 0;
+      var line=0;
+      var lin=80;
+      var row=0;
+      var canvas = document.getElementById('myCanvas');
+      var ctx1 = canvas.getContext('2d');
+      var ctx2anvas = document.getElementById('datavertCanvas');
+      var ctx2 = ctx2anvas.getContext('2d');
+      var ctx3anvas = document.getElementById('datahorizCanvas');
+      var ctx3 = ctx3anvas.getContext('2d');
+      var imageObj = new Image();
+      var currentpic=globalstep=1
+      var processcount=0
+      var ImgData=ctx2.getImageData(0,0,318,159);
+      var DataImg=ctx2.getImageData(0,0,318,159);
+      var rad1=10;
+      var rad2=12;
+
+
+
+      imageObj.onload = function() {
+         scan_vert(0,1,159);
+      };
+
+      function loadpic(change)
+      {
+      currentpic+=change
+      var mystring=""+(currentpic+100);
+      mystring=mystring.slice(1,9);
+      imageObj.src = 'eyes/eyes'+mystring+'.jpg';
+        console.log(imageObj.src)
+      console.log("Image obj w h "+imageObj.width+" "+imageObj.height)
+    }
+
+    loadpic(0);
+      
+       
+      function scan_vert(line,step,max)
+      {
+   //console.log("Scanning v line "+line);
+    processcount+=1;
+          ctx1.drawImage(imageObj, 0, 0);
+          imgData=ctx1.getImageData(0,0,318,159);
+          DataImg=ctx1.createImageData(318,159);
+            
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (0==0)//strap on boobs
+                    {
+                      var average=0;
+                      phi=i-i%(4*318)//get first pixel of each row
+                      DataImg.data[phi+imgData.data[i]*4]=255
+                      average+=imgData.data[i]
+                      DataImg.data[phi+imgData.data[i]*4+3]=255
+
+
+                       DataImg.data[phi+imgData.data[i+1]*4+1]=255
+                       average+=imgData.data[i+1]
+                       DataImg.data[phi+imgData.data[i+1]*4+3]=255
+
+                        DataImg.data[phi+imgData.data[i+2]*4+2]=255;
+                        average+=imgData.data[i+2]
+                        DataImg.data[phi+imgData.data[i+2]*4+3]=255;
+
+                        average=average/3;        
+                        DataImg.data[phi+average*4]=255;
+                        DataImg.data[phi+average*4+2]=255;
+                        DataImg.data[phi+average*4+3]=255;
+
+
+
+                
+                
+                 
+            }
+                }
+
+           for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (1==1)//strap on boobs
+                    {
+                DataImg.data[i]=imgData.data[i];
+                DataImg.data[i+1]=imgData.data[i+1];
+               DataImg.data[i+2]=imgData.data[i+2];
+                 DataImg.data[i+3]=255;
+            }
+                }
+
+if (1){
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                     if (i%13==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+
+          for (var i=line*4;i<imgData.data.length;i+=4*318)
+                {
+                    if (i%128==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+            }
+
+        ctx1.moveTo(line,0);
+    ctx1.lineTo(line,5);
+    ctx1.stroke();
+    ctx2.moveTo(line,0);
+    ctx2.lineTo(line,5);
+    ctx2.stroke();
+       
+       ctx2.putImageData(imgData,0,5);
+
+       ctx3.putImageData(DataImg,0,5);
+       rad1=rad2-2;
+       eye_grabber(line,lin,rad1,rad2,20,500,-1);
+       eye_grabber(318-line,lin,rad1,rad2,20,500,-1);
+
+
+
+      
+  step=globalstep;
+      //repeat part
+      if (line<max&&line>-1)
+      {
+      setTimeout(function(){ scan_vert(line+step,step,max); }, 40);
+        }
+      else
+        {
+          console.log(processcount)
+          if (line<-1)
+          {line=159;
+
+             loadpic(-1);
+           }
+           else loadpic(1);
+        }
+        processcount-=1;
+
+      }
+
+   
+
+
+     function scan_horiz(row,step,max)
+      {
+   //console.log("Scanning v line "+line);
+    processcount+=1;
+          //ctx1.drawImage(imageObj, 0, 0);
+          imgData=ctx1.getImageData(0,0,318,159);
+          DataImg=ctx1.createImageData(318,159);
+            
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                     if (0==0)//strap on boobs
+                    {
+                      var average=0;
+                      phi=i-row*318*4//get first pixel of each row
+                      DataImg.data[phi+imgData.data[i]*4*318]=255
+                      average+=imgData.data[i]
+                      DataImg.data[phi+imgData.data[i]*4*318+3]=255
+
+
+                       DataImg.data[phi+imgData.data[i+1]*4*318+1]=255
+                       average+=imgData.data[i+1]
+                       DataImg.data[phi+imgData.data[i+1]*4*318+3]=255
+
+                        DataImg.data[phi+imgData.data[i+2]*4*318+2]=255;
+                        average+=imgData.data[i+2]
+                        DataImg.data[phi+imgData.data[i+2]*4*318+3]=255;
+
+                        average=average/3;        
+                        DataImg.data[phi+average*4*318]=255;
+                        DataImg.data[phi+average*4*318+2]=255;
+                        DataImg.data[phi+average*4*318+3]=255;
+
+
+
+                
+                
+                 
+            }
+                }
+
+
+if (1){
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                     if (i%13==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+
+          for (var i=row*318*4;i<imgData.data.length;i+=4)
+                {
+                    if (i%128==0)
+                    {
+                    imgData.data[i]=255-imgData.data[i];
+                imgData.data[i+1]=255-imgData.data[i+1];
+                imgData.data[i+2]=255-imgData.data[i+2];
+            }
+                }
+            }
+
+    ctx1.moveTo(line,0);
+    ctx1.lineTo(line,5);
+    ctx1.stroke();
+    ctx2.moveTo(line,0);
+    ctx2.lineTo(line,5);
+    ctx2.stroke();
+       
+       ctx2.putImageData(imgData,0,5);
+
+       ctx3.putImageData(DataImg,0,5);
+       
+
+
+      
+  step=globalstep;
+      //repeat part
+      if (line<max)
+      {
+      setTimeout(function(){ scan_vert(line+step,step,max); }, 50);
+        }
+      else
+        {
+         // console.log(processcount)
+             loadpic(1);
+        }
+        processcount-=1;
+
+        }
+
+
+function getfillstyle(x,y)
+{
+
+
+  return '#00ff00';
+}
+
+ function eye_grabber(x,y,radius1,radius2,delay,time,dirx)
+      {
+
+        if (this.x===undefined) {self.x=x;}
+        if (this.y===undefined) {self.y=y;}
+        
+        this.delay=delay;
+        this.time=time;
+        this.dirx=dirx;
+
+
+        processcount+=1;
+       // console.log(processcount);
+        ctx1.beginPath();
+        ctx1.arc(x,y,radius1,0,2*Math.PI);
+        ctx1.stroke();
+
+        ctx1.beginPath();
+        ctx1.arc(x,y,radius2,0,2*Math.PI);
+        ctx1.stroke();
+
+        ctx1.beginPath();
+        ctx1.arc(x,y,2,0,2*Math.PI);
+    
+        ctx1.fill();
+
+        ctx2.beginPath();
+        ctx2.arc(x,y,radius1,0,2*Math.PI);
+        ctx2.stroke();
+
+        ctx2.beginPath();
+        ctx2.arc(x,y,radius2,0,2*Math.PI);
+        ctx2.stroke();
+
+        ctx2.beginPath();
+        ctx2.arc(x,y,2,0,2*Math.PI);
+       
+        ctx2.fill();
+
+        ctx3.beginPath();
+        ctx3.arc(x,y,radius1,0,2*Math.PI);
+        ctx3.stroke();
+
+        ctx3.beginPath();
+        ctx3.arc(x,y,radius2,0,2*Math.PI);
+        ctx3.stroke();
+
+      
+        ctx3.beginPath();
+        ctx3.arc(x,y,2,0,2*Math.PI);
+        ctx3.fill();
+
+        ctx3.beginPath();
+        ctx3.arc(x+radius1,y,2,0,2*Math.PI);
+        ctx3.fill();
+
+        ctx3.beginPath();
+        var xx=x+radius1*Math.cos(30 * (Math.PI / 180));
+        var yy=y+radius1*Math.sin(30 * (Math.PI / 180));
+        ctx3.arc(xx,yy,2,0,2*Math.PI);
+
+   
+        ctx3.fill();
+
+        for (var i=0;i<360;i+=30)
+        {
+        ctx3.fillstyle="#00FF00";
+        ctx3.fillstyle=getfillstyle(x+radius1*Math.cos(i * (Math.PI / 180)),y+radius1*Math.sin(-i * (Math.PI / 180)));
+        
+        ctx3.beginPath();
+        ctx3.arc(x+radius1*Math.cos(i * (Math.PI / 180)),y+radius1*Math.sin(-i * (Math.PI / 180)),2,0,2*Math.PI);
+        ctx3.fill();
+
+        ctx3.fillstyle=getfillstyle(x+radius2*Math.cos(i * (Math.PI / 180)),y+radius2*Math.sin(-i * (Math.PI / 180)));
+     
+        ctx3.beginPath();
+        ctx3.arc(x+radius2*Math.cos(i * (Math.PI / 180)),y+radius2*Math.sin(i * (Math.PI / 180)),2,0,2*Math.PI);
+        ctx3.fill();
+        }
+
+ 
+
+
+
+        var newdelay=delay;
+        x+=dirx;
+
+        
+
+        
+      }
+
+
+  
+    </script>
+  </body>
+</html>      
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://www.script-tutorials.com/demos/303/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="author" content="Script Tutorials">
+    <title>Webcam Video Capture in HTML5 and CSS3 filters | Script Tutorials</title>
+
+    <!-- Link styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Link scripts -->
+    <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h2>Eye tracking - project 2 (<a href="http://www.script-tutorials.com/webcam-video-capture-in-html5-and-css3-filters/">Back to original tutorial</a>)</h2>
+    </header>
+
+
+    <div class="container">
+        <h3>Current filter is: None</h3>
+        <button>Click here to change video filter</button>
+        <button id="smbutton" onclick="scanmode=0">Recalibrate</button>
+        <div class="warning"><h3> not supported</h3></div>
+        <div style="clear:both"></div>
+        <div class="col">
+       
+            <video></video>
+                <div id="undervid">Text under video</div>
+        </div>
+        <div class="col">
+   
+            <canvas width="640" height="480"></canvas>
+               <div id="undercanv">Text under canvas</div>
+        </div>
+         <div id="underall">You might wanna flip screen with filter</div>
+    </div>
+
+    
+</body></html>
